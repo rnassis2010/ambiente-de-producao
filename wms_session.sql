@@ -1,0 +1,8 @@
+set line 200
+set pagesize 100
+col ACTION format a25
+col MACHINE format a30
+select to_char(LOGON_TIME, 'DD/MM/YYY-HH24:MI:SS') LOGON,ceil(LAST_CALL_ET/60) last_call_min,INST_ID,SID,SERIAL#,STATUS,MACHINE,SQL_ID,SQL_HASH_VALUE,SQL_ADDRESS,SQL_CHILD_NUMBER,ACTION
+FROM gv$session
+WHERE MODULE LIKE '%MWAJDBC%'
+order by 1;
