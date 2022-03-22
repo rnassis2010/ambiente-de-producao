@@ -1,0 +1,1 @@
+SELECT dbms_sqltune.report_tuning_task('sqltune_87nt40c5wj7y5','TEXT','TYPICAL','FINDINGS') from dual;                                                                                                                                                    

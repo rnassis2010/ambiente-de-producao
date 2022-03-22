@@ -1,0 +1,318 @@
+          ADDM Report for Task 'TASK_1078'
+          --------------------------------
+
+Analysis Period
+---------------
+AWR snapshot range from 929 to 931.
+Time period starts at 27-JAN-22 11.00.40 AM
+Time period ends at 27-JAN-22 01.00.44 PM
+
+Analysis Target
+---------------
+Database 'EBSPRODC' with DB ID 3074616460.
+Database version 19.0.0.0.0.
+ADDM performed an analysis of instance EBSPRODC, numbered 1 and hosted at
+dbebsprod.
+ADDM detected that the database type is MULTITENANT DB.
+
+Activity During the Analysis Period
+-----------------------------------
+Total database time was 5704 seconds.
+The average number of active sessions was .79.
+
+Summary of Findings
+-------------------
+   Description         Active Sessions      Recommendations
+                       Percent of Activity
+   ------------------  -------------------  ---------------
+1  Top SQL Statements  .69 | 86.54          3
+2  PL/SQL Execution    .02 | 3.08           1
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+          Findings and Recommendations
+          ----------------------------
+
+Finding 1: Top SQL Statements
+Impact is .69 active sessions, 86.54% of total activity.
+--------------------------------------------------------
+SQL statements consuming significant database time were found. These
+statements offer a good opportunity for performance improvement.
+
+   Recommendation 1: SQL Tuning
+   Estimated benefit is .6 active sessions, 76.15% of total activity.
+   ------------------------------------------------------------------
+   Action
+      Run SQL Tuning Advisor on the SELECT statement with SQL_ID
+      "379bfuyjbzh3d".
+      Related Object
+         SQL statement with SQL_ID 379bfuyjbzh3d.
+         SELECT DISTINCT ACRA.CASH_RECEIPT_ID FROM
+         AR_RECEIVABLE_APPLICATIONS_V ARS, AR_CASH_RECEIPTS_ALL ACRA WHERE 1 =
+         1 AND ARS.CUSTOMER_TRX_ID = NVL(:B1 , ARS.CUSTOMER_TRX_ID) AND
+         ARS.CASH_RECEIPT_ID = ACRA.CASH_RECEIPT_ID AND ARS.APPLY_DATE =
+         (SELECT MAX(APPLY_DATE) FROM AR_RECEIVABLE_APPLICATIONS_V A WHERE
+         CUSTOMER_TRX_ID = :B1 AND A.RECEIVABLE_APPLICATION_ID =
+         ARS.RECEIVABLE_APPLICATION_ID AND APPLY_DATE <= :B2 )
+   Rationale
+      The SQL statement executed in container EBSPROD with database ID
+      3662115071.
+   Rationale
+      The SQL spent 100% of its database time on CPU, I/O and Cluster waits.
+      This part of database time may be improved by the SQL Tuning Advisor.
+   Rationale
+      Database time for this SQL was divided as follows: 100% for SQL
+      execution, 0% for parsing, 0% for PL/SQL execution and 0% for Java
+      execution.
+   Rationale
+      SQL statement with SQL_ID "379bfuyjbzh3d" was executed 69 times and had
+      an average elapsed time of 57 seconds.
+   Rationale
+      Top level calls to execute the PL/SQL statement with SQL_ID
+      "286b4by67u1qx" are responsible for 100% of the database time spent on
+      the SELECT statement with SQL_ID "379bfuyjbzh3d".
+      Related Object
+         SQL statement with SQL_ID 286b4by67u1qx.
+         BEGIN dto_ar_vci_iface_pk.dto_processamento2_p(:errbuf,:rc,:A0,:A1,:A
+         2,:A3); END;
+
+   Recommendation 2: SQL Tuning
+   Estimated benefit is .05 active sessions, 6.54% of total activity.
+   ------------------------------------------------------------------
+   Action
+      Run SQL Tuning Advisor on the SELECT statement with SQL_ID
+      "60hd8rq68rkjw".
+      Related Object
+         SQL statement with SQL_ID 60hd8rq68rkjw.
+         SELECT ASA.DUE_DATE, TRX_NUMBER, ASA.ACTUAL_DATE_CLOSED FROM
+         AR_PAYMENT_SCHEDULES_ALL ASA WHERE 1 = 1 AND ASA.ORG_ID =
+         FND_PROFILE.VALUE('ORG_ID') AND PAYMENT_SCHEDULE_ID = :B1
+   Rationale
+      The SQL statement executed in container EBSPROD with database ID
+      3662115071.
+   Rationale
+      The SQL spent 100% of its database time on CPU, I/O and Cluster waits.
+      This part of database time may be improved by the SQL Tuning Advisor.
+   Rationale
+      Database time for this SQL was divided as follows: 89% for SQL
+      execution, 0% for parsing, 11% for PL/SQL execution and 0% for Java
+      execution.
+   Rationale
+      Top level calls to execute the PL/SQL statement with SQL_ID
+      "5sa501khs7vjy" are responsible for 100% of the database time spent on
+      the SELECT statement with SQL_ID "60hd8rq68rkjw".
+      Related Object
+         SQL statement with SQL_ID 5sa501khs7vjy.
+         BEGIN dto_ar_bal_repor_detail_pk.dto_processamento_p(:errbuf,:rc,:A0,
+         :A1,:A2,:A3); END;
+
+   Recommendation 3: SQL Tuning
+   Estimated benefit is .03 active sessions, 3.65% of total activity.
+   ------------------------------------------------------------------
+   Action
+      Run SQL Tuning Advisor on the SELECT statement with SQL_ID
+      "0a0vcxkbjfa7t".
+      Related Object
+         SQL statement with SQL_ID 0a0vcxkbjfa7t.
+         SELECT DISTINCT RAC_CUSTOMER_NUMBER, RAC_CUSTOMER_NAME, TRX_NUMBER,
+         TRX_DATE, AMOUNT_DUE_REMAINING, RAT_TERM_NAME, AMOUNT_DUE_ORIGINAL,
+         TYPE_NAME, DUE_DATE, GL_DATE, DAYS_PAST_DUE, INVOICE_CURRENCY_CODE,
+         TERMS_SEQUENCE_NUMBER, CLASS, DUE_DAYS, AL_STATUS_MEANING,
+         SUBSTR(REPLACE(REPLACE(REPLACE(COMMENTS, CHR(13), ' '), CHR(9), ' '),
+         CHR(10), ' - '), 1, 77) COMMENTS, QUEBRA, CONTA_CONTABIL_NEW,
+         CUSTOMER_TRX_ID, ORIGEM, STATUS, ACTUAL_DATE_CLOSED FROM (SELECT
+         DISTINCT APS.RAC_CUSTOMER_NUMBER, APS.RAC_CUSTOMER_NAME,
+         APS.TRX_NUMBER, APS.TRX_DATE,
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_BALANCE_DUE_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) AMOUNT_DUE_REMAINING, APS.RAT_TERM_NAME,
+         APS.AMOUNT_DUE_ORIGINAL, APS.TYPE_NAME, APS.DUE_DATE, APS.GL_DATE,
+         APS.DAYS_PAST_DUE, APS.INVOICE_CURRENCY_CODE,
+         APS.TERMS_SEQUENCE_NUMBER, APS.CLASS, APS.DUE_DAYS,
+         DECODE(APS.AL_STATUS_MEANING, 'Closed', 'Open',
+         APS.AL_STATUS_MEANING) AL_STATUS_MEANING, APS.COMMENTS, APS.STATUS,
+         APS.ACTUAL_DATE_CLOSED , CASE WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) <= 0 THEN 'Current' WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) BETWEEN 1 AND 30 THEN '1-30 days' WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) BETWEEN 31 AND 60 THEN '31-60 days' WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) BETWEEN 61 AND 90 THEN '61-90 days' WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) BETWEEN 91 AND 120 THEN '91-120 days' WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) BETWEEN 121 AND 180 THEN '121-180 days' WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) BETWEEN 181 AND 365 THEN '181-365 days' WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) BETWEEN 366 AND 9999 THEN 'Overdue' END QUEBRA,
+         DWTT.NEW_CHARGE_ACCOUNT CONTA_CONTABIL_NEW, APS.CUSTOMER_TRX_ID,
+         'DM_INV' ORIGEM FROM AR_PAYMENT_SCHEDULES_V APS,
+         DTO_AR_WORK_TABLE_TAB DWTT WHERE 1 = 1 AND DWTT.REQUEST_ID = :B1 AND
+         DWTT.CUSTOMER_TRX_ID(+) = APS.CUSTOMER_TRX_ID AND APS.CLASS IN ('DM',
+         'INV') AND APS.CUSTOMER_TRX_ID IN (SELECT DWTT_1.CUSTOMER_TRX_ID FROM
+         DTO_AR_WORK_TABLE_TAB DWTT_1 WHERE 1 = 1 AND DWTT_1.REQUEST_ID = :B1
+         AND DWTT_1.PARAMETER_ACCOUNT != DWTT_1.NEW_CHARGE_ACCOUNT AND
+         DWTT_1.PARAMETER_ACCOUNT_DE >= :B6 AND DWTT_1.PARAMETER_ACCOUNT_ATE
+         <= :B5 AND DWTT_1.NEW_CHARGE_ACCOUNT = :B4 AND
+         DWTT_1.PARAMETER_ACCOUNT = :B3 AND DWTT_1.TRANSACTION_TYPE =
+         'DM-INV') UNION SELECT DISTINCT APS.RAC_CUSTOMER_NUMBER,
+         APS.RAC_CUSTOMER_NAME, APS.TRX_NUMBER, APS.TRX_DATE,
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_BALANCE_DUE_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) AMOUNT_DUE_REMAINING, APS.RAT_TERM_NAME,
+         APS.AMOUNT_DUE_ORIGINAL, APS.TYPE_NAME, APS.DUE_DATE, APS.GL_DATE,
+         APS.DAYS_PAST_DUE, APS.INVOICE_CURRENCY_CODE,
+         APS.TERMS_SEQUENCE_NUMBER, 'UNAPP' CLASS, APS.DUE_DAYS,
+         DECODE(APS.AL_STATUS_MEANING, 'Closed', 'Open',
+         APS.AL_STATUS_MEANING) AL_STATUS_MEANING, APS.COMMENTS, APS.STATUS,
+         APS.ACTUAL_DATE_CLOSED, CASE WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) <= 0 THEN 'Current' WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) BETWEEN 1 AND 30 THEN '1-30 days' WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) BETWEEN 31 AND 60 THEN '31-60 days' WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) BETWEEN 61 AND 90 THEN '61-90 days' WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) BETWEEN 91 AND 120 THEN '91-120 days' WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) BETWEEN 121 AND 180 THEN '121-180 days' WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) BETWEEN 181 AND 365 THEN '181-365 days' WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) BETWEEN 366 AND 9999 THEN 'Overdue' END QUEBRA ,
+         GCFH.PARENT_FLEX_VALUE CONTA_CONTABIL_NEW, APS.CUSTOMER_TRX_ID,
+         'UNAPP' ORIGEM FROM AR_PAYMENT_SCHEDULES_V APS, AR_CASH_RECEIPTS_ALL
+         ACR, XLA_AR_REC_AEL_SL_V XAV, GL_SETS_OF_BOOKS GSO,
+         GL_CODE_COMBINATIONS GCC, GL_CONSOLIDATION GC, GL_CONS_SEGMENT_MAP
+         GCSM, GL_CONS_FLEX_HIERARCHIES GCFH WHERE 1 = 1 AND
+         APS.CASH_RECEIPT_ID(+) = ACR.CASH_RECEIPT_ID AND ACR.STATUS IN
+         ('UNAPP') AND ACR.CASH_RECEIPT_ID = XAV.TRX_HDR_ID AND
+         XAV.CODE_COMBINATION_ID = GCC.CODE_COMBINATION_ID AND
+         GSO.SET_OF_BOOKS_ID = FND_PROFILE.VALUE('GL_SET_OF_BKS_ID') AND
+         GSO.CHART_OF_ACCOUNTS_ID = GCC.CHART_OF_ACCOUNTS_ID AND GCC.SEGMENT4
+         = GCFH.CHILD_FLEX_VALUE_LOW AND GC.CONSOLIDATION_ID =
+         GCSM.CONSOLIDATION_ID_11I AND GCFH.PARENT_FLEX_VALUE = :B4 AND
+         GCSM.SINGLE_VALUE = GCFH.PARENT_FLEX_VALUE AND GCFH.SEGMENT_MAP_ID =
+         GCSM.SEGMENT_MAP_ID AND GCSM.SEGMENT_MAP_TYPE = 'R' AND
+         GC.FROM_LEDGER_ID = GSO.SET_OF_BOOKS_ID AND ACR.CASH_RECEIPT_ID IN
+         (SELECT DWTT_1.CASH_RECEIPT_ID FROM DTO_AR_WORK_TABLE_TAB DWTT_1
+         WHERE 1 = 1 AND DWTT_1.REQUEST_ID = :B1 AND
+         DWTT_1.PARAMETER_ACCOUNT_DE >= :B6 AND DWTT_1.PARAMETER_ACCOUNT_ATE
+         <= :B5 AND DWTT_1.NEW_CHARGE_ACCOUNT = :B4 AND
+         DWTT_1.PARAMETER_ACCOUNT = :B3 AND DWTT_1.CASH_RECEIPT_ID =
+         ACR.CASH_RECEIPT_ID AND DWTT_1.TRANSACTION_TYPE = 'UNAPP') UNION
+         SELECT DISTINCT NULL RAC_CUSTOMER_NUMBER, NULL RAC_CUSTOMER_NAME,
+         ACR.RECEIPT_NUMBER TRX_NUMBER, XAV.PAYMENT_DEPOSIT_DATE TRX_DATE,
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_BALANCE_DUE_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) AMOUNT_DUE_REMAINING, NULL RAT_TERM_NAME, ACR.AMOUNT * -1
+         AMOUNT_DUE_ORIGINAL, XAV.TRX_TYPE_NAME TYPE_NAME, ACR.RECEIPT_DATE
+         DUE_DATE, XAV.APPLICATION_DATE GL_DATE, DAYS_PAST_DUE,
+         XAV.TRX_HDR_CURRENCY INVOICE_CURRENCY_CODE, NULL
+         TERMS_SEQUENCE_NUMBER, 'UNID' CLASS, NULL DUE_DAYS, 'Open'
+         AL_STATUS_MEANING, ACR.COMMENTS, NULL STATUS, ACR.RECEIPT_DATE
+         ACTUAL_DATE_CLOSE, CASE WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) <= 0 THEN 'Current' WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) BETWEEN 1 AND 30 THEN '1-30 days' WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) BETWEEN 31 AND 60 THEN '31-60 days' WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) BETWEEN 61 AND 90 THEN '61-90 days' WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) BETWEEN 91 AND 120 THEN '91-120 days' WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) BETWEEN 121 AND 180 THEN '121-180 days' WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) BETWEEN 181 AND 365 THEN '181-365 days' WHEN
+         DTO_AR_BAL_REPOR_DETAIL_PK.GET_TOTAL_DAY_F(APS.PAYMENT_SCHEDULE_ID,
+         :B2 ) BETWEEN 366 AND 9999 THEN 'Overdue' END QUEBRA ,
+         GCFH.PARENT_FLEX_VALUE CONTA_CONTABIL_NEW, NULL CUSTOMER_TRX_ID,
+         'UNID' ORIGEM FROM AR_PAYMENT_SCHEDULES_V APS, AR_CASH_RECEIPTS_ALL
+         ACR, XLA_AR_REC_AEL_SL_V XAV, GL_SETS_OF_BOOKS GSO,
+         GL_CODE_COMBINATIONS GCC, GL_CONSOLIDATION GC, GL_CONS_SEGMENT_MAP
+         GCSM, GL_CONS_FLEX_HIERARCHIES GCFH WHERE 1 = 1 AND
+         APS.CASH_RECEIPT_ID(+) = ACR.CASH_RECEIPT_ID AND ACR.STATUS IN
+         ('UNID') AND ACR.CASH_RECEIPT_ID = XAV.TRX_HDR_ID AND
+         XAV.CODE_COMBINATION_ID = GCC.CODE_COMBINATION_ID AND
+         GSO.SET_OF_BOOKS_ID = FND_PROFILE.VALUE('GL_SET_OF_BKS_ID') AND
+         GSO.CHART_OF_ACCOUNTS_ID = GCC.CHART_OF_ACCOUNTS_ID AND GCC.SEGMENT4
+         = GCFH.CHILD_FLEX_VALUE_LOW AND GC.CONSOLIDATION_ID =
+         GCSM.CONSOLIDATION_ID_11I AND GCFH.PARENT_FLEX_VALUE = :B4 AND
+         GCSM.SINGLE_VALUE = GCFH.PARENT_FLEX_VALUE AND GCFH.SEGMENT_MAP_ID =
+         GCSM.SEGMENT_MAP_ID AND GCSM.SEGMENT_MAP_TYPE = 'R' AND
+         GC.FROM_LEDGER_ID = GSO.SET_OF_BOOKS_ID AND ACR.CASH_RECEIPT_ID IN
+         (SELECT DWTT_1.CASH_RECEIPT_ID FROM DTO_AR_WORK_TABLE_TAB DWTT_1
+         WHERE 1 = 1 AND DWTT_1.REQUEST_ID = :B1 AND
+         DWTT_1.PARAMETER_ACCOUNT_DE >= :B6 AND DWTT_1.PARAMETER_ACCOUNT_ATE
+         <= :B5 AND DWTT_1.NEW_CHARGE_ACCOUNT = :B4 AND
+         DWTT_1.PARAMETER_ACCOUNT = :B3 AND DWTT_1.CASH_RECEIPT_ID =
+         ACR.CASH_RECEIPT_ID AND DWTT_1.TRANSACTION_TYPE = 'UNID')) WHERE 1 =
+         1 AND QUEBRA = :B7 ORDER BY DUE_DAYS, RAC_CUSTOMER_NAME
+   Rationale
+      The SQL statement executed in container EBSPROD with database ID
+      3662115071.
+   Rationale
+      The SQL spent 95% of its database time on CPU, I/O and Cluster waits.
+      This part of database time may be improved by the SQL Tuning Advisor.
+   Rationale
+      Database time for this SQL was divided as follows: 45% for SQL
+      execution, 5% for parsing, 50% for PL/SQL execution and 0% for Java
+      execution.
+   Rationale
+      SQL statement with SQL_ID "0a0vcxkbjfa7t" was executed 8 times and had
+      an average elapsed time of 79 seconds.
+   Rationale
+      Top level calls to execute the PL/SQL statement with SQL_ID
+      "5sa501khs7vjy" are responsible for 100% of the database time spent on
+      the SELECT statement with SQL_ID "0a0vcxkbjfa7t".
+      Related Object
+         SQL statement with SQL_ID 5sa501khs7vjy.
+         BEGIN dto_ar_bal_repor_detail_pk.dto_processamento_p(:errbuf,:rc,:A0,
+         :A1,:A2,:A3); END;
+
+
+Finding 2: PL/SQL Execution
+Impact is .02 active sessions, 3.08% of total activity.
+-------------------------------------------------------
+PL/SQL execution consumed significant database time.
+
+   Recommendation 1: SQL Tuning
+   Estimated benefit is .02 active sessions, 3.08% of total activity.
+   ------------------------------------------------------------------
+   Action
+      Tune the entry point PL/SQL ID 3585829. Refer to the PL/SQL
+      documentation for addition information.
+   Rationale
+      The SQL statement executed in container EBSPROD with database ID
+      3662115071.
+   Rationale
+      Subprogam ID 17 of PL/SQL ID 3585829 spent 54 seconds in execution.
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+          Additional Information
+          ----------------------
+
+Miscellaneous Information
+-------------------------
+Wait class "Application" was not consuming significant database time.
+Wait class "Commit" was not consuming significant database time.
+Wait class "Concurrency" was not consuming significant database time.
+Wait class "Configuration" was not consuming significant database time.
+CPU was not a bottleneck for the instance.
+Wait class "Network" was not consuming significant database time.
+Wait class "User I/O" was not consuming significant database time.
+Session connect and disconnect calls were not consuming significant database
+time.
+Hard parsing of SQL statements was not consuming significant database time.
+
